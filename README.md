@@ -1,4 +1,4 @@
-# Open world attributed temporal graph prediction
+# NBA Players stats since 1950
 
 ## データの用意
 ### ディレクトリ構成
@@ -11,7 +11,3 @@
 
 ### Player nodeが持つ属性
 + name
-+ 
-
-
-## aaa
