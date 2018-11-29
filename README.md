@@ -1,4 +1,4 @@
-# NBA Players stats since 1950
+# NBA Players Stats since 1950
 
 ## データの用意
 ### ディレクトリ構成
