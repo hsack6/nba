@@ -11,21 +11,21 @@
           |-time_series_graph.csv
 
 ### Player nodeが持つ属性
-+ name(c)
-+ height(c)
-+ weight(c)
-+ collage(c)
-+ birth_city(c)
-+ birth_state(c)
-+ position(x)
-+ Tm(x)
-+ Age(= year-bornだけど)
-+ year(x:year_start〜year_end)
-+ born(c)
-+ all_Stats(x)
++ name(c, Players)
++ height(c, Players)
++ weight(c, Players)
++ collage(c, Players)
++ birth_city(c, Players)
++ birth_state(c, Players)
++ born(c, Players)
++ year(x, Seasons_Stats)
++ position(x, Seasons_Stats)
++ Tm(x, Seasons_Stats)
++ Age(= year-bornだけど, Seasons_Stats)
++ all_ohers_Stats(x, Seasons_Stats)
 
 ### node.csv
-上記、カラムを有するcsvをname>yearでソート。同姓同名がいるのでplayerごとにユニークなIDを付与。  
+上記、カラムを有するcsvをname>yearでソート。
 0 Alex 1950 ・・・  
 0 Alex 1951 ・・・  
 0 Alex 1952 ・・・  
