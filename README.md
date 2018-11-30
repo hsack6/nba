@@ -33,6 +33,13 @@
 1 Michel 1951 ・・・  
 1 Michel 1952 ・・・  
 
+### 放置
+下記、36歳以上切り捨てで一旦回避。欠損値全て切り捨てで一旦回避。
++ Players.csvの記入ミス(Harrison Barnes と Harry Barnes等)
++ Players.csvの同姓同名問題(player_data.csv参照で解決できそう)
++ 一つでもNaNを持つものをdrop
++ 同シーズン複数チームで出場している選手を排除。
+
 ### time_series_graph.csv
 上記、カラム+リンクのエンコード情報(value, one-hot等)を有するcsvをyear>nameでソート。  
 1950 0 Alex ・・・ リンク情報  
