@@ -40,6 +40,10 @@
 + 一つでもNaNを持つものをdrop
 + 同シーズン複数チームで出場している選手を排除。
 
+### originalの修正
++ Players.csvのHarrison Barnesのborn,collage,height,weightを修正。（Harry Barnesと混同されていた。）
++ player_data.csvのBobby Wilsonのbirth_dateを追加。
+
 ### time_series_graph.csv
 上記、カラム+リンクのエンコード情報(value, one-hot等)を有するcsvをyear>nameでソート。  
 1950 0 Alex ・・・ リンク情報  
