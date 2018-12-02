@@ -1,59 +1,29 @@
-# NBA Players stats since 1950
+# EDA と Feature Engineering
+
+NBAデータセットのEDAとFeature Engineeringに関するメモ。
 
 ## データの用意
-### ディレクトリ構成
+NBA Players stats since 1950 https://www.kaggle.com/drgilermo/nba-players-stats
 
-    MakeGraph.py
+## ディレクトリ構成
+上記URLからDLしてきたファイル（original/以下）を修正し、EDA/に保存する。
+
+    EDA.py
     original---player_data.csv
              |-Players.csv
              |-Seasons_Stats.csv
-    graph---node.csv
-          |-time_series_graph.csv
+    EDA---player_data.csv
+         |-Players.csv
+         |-Seasons_Stats.csv
+         |-EDA.csv
 
-### Player nodeが持つ属性
-+ name(c, Players)
-+ height(c, Players)
-+ weight(c, Players)
-+ collage(c, Players)
-+ birth_city(c, Players)
-+ birth_state(c, Players)
-+ born(c, Players)
-+ year(x, Seasons_Stats)
-+ position(x, Seasons_Stats)
-+ Tm(x, Seasons_Stats)
-+ Age(= year-bornだけど, Seasons_Stats)
-+ all_ohers_Stats(x, Seasons_Stats)
-
-### node.csv
-上記、カラムを有するcsvをname>yearでソート。
-0 Alex 1950 ・・・  
-0 Alex 1951 ・・・  
-0 Alex 1952 ・・・  
-1 Michel 1950 ・・・  
-1 Michel 1951 ・・・  
-1 Michel 1952 ・・・  
-
-### 放置
-下記、36歳以上切り捨てで一旦回避。欠損値全て切り捨てで一旦回避。
-+ Players.csvの記入ミス(Harrison Barnes と Harry Barnes等)
-+ Players.csvの同姓同名問題(player_data.csv参照で解決できそう)
-+ 一つでもNaNを持つものをdrop
-+ 同シーズン複数チームで出場している選手を排除。
-
-### originalの修正
+## originalの修正
 + Players.csvのHarrison Barnesのborn,collage,height,weightを修正。（Harry Barnesと混同されていた。）
-+ player_data.csvのBobby Wilsonのbirth_dateを追加。
+    - EDA.pyの中に修正コードを置いたのでおそらく変更せずとも動く。
++ player_data.csvのBobby Wilsonのbirth_dateが抜けていたので追加。
++ player_data.csvのJohn LucasをJohn Lucas 0に,John Lucas ⅢをJohn Lucas 1に変更。
 
-### time_series_graph.csv
-上記、カラム+リンクのエンコード情報(value, one-hot等)を有するcsvをyear>nameでソート。  
-1950 0 Alex ・・・ リンク情報  
-1950 1 Michel ・・・ リンク情報  
-1951 0 Alex ・・・ リンク情報  
-1951 1 Michel ・・・ リンク情報  
-1952 0 Alex ・・・ リンク情報  
-1952 1 Michel ・・・ リンク情報  
-
-# NBA Dataset Glossary
+## NBAデータセット用語
 https://www.basketball-reference.com/about/glossary.html
 + Year　：　NBAシーズンは2年にまたがっているので、与えられるYearはそのシーズンの後ろの年。 例えば1999-2000シーズンのYearは2000。
 + Pos　：　ポジション
@@ -69,7 +39,7 @@ https://www.basketball-reference.com/about/glossary.html
     - F-G : フォワードガード
     - C-F : センターフォワード
     - PF-C : フォワードセンター
-+ Tm　：　チーム
++ Tm　：　チーム。データセットに含まれるチーム数はTOT含めて69。2018現在、activeなチーム数は30。
 + G　：　試合数
 + GS　：　先発出場数
 + MP　：　出場時間
@@ -132,3 +102,109 @@ https://www.basketball-reference.com/about/glossary.html
 + FT　：　フリースロー入った数。
 + FT%　：　＝ FT / FTA。
 + PF　：　個人のファール数。
+
+# データ分析のプロセス
+EDAとFeature Engineeringについては何も考えずに始めると作業を深堀しすぎたり、抜け漏れが起こるためここにやることをまとめておく。
+データ分析のプロセスとして大まかに
++ データの理解(EDA)
++ データの準備(Feature Engineering)
++ モデリング
+に分けれられる。機械学習を扱うとなると、モデリングに注目しがちであるが、実際の作業量としては、それより前のステップであるデータの理解とデータの準備のステップが大半を占める。
+
+## データの理解（EDA）
+EDAを行う目的としては、データの特徴や構造を理解することが挙げられる。データの理解を怠れば、この後のデータの準備ステップで適切な前処理やFeature Engineeringを行うことはできない。
+### やることリスト
++ データの各特徴名とその意味の確認
++ データの大きさの確認(pandasの.shape)
++ 表の一部分表示(pandasの.dtypes())
++ 特徴量ごとの平均値、最大値、最小値などの統計量確認(pandasの.describe())
++ 欠損値チェック(pandasの.isnull().sum())
++ ヒストグラムによる分布の可視化
++ 散布図や箱ひげ図を用いた目的変数と、説明変数の関係の可視化
++ 時系列データであれば、時系列トレンドの可視化
++ 外れ値の確認
++ 次元削減による可視化(PCA, T-SNE, UMAP)
++ 複数のカテゴリ特徴で分割したときの傾向確認(数が膨大になるため、仮定を置いてから実行)
+
+### 便利ツール
++ pandas-profiling
++ missingno
++ seaborn.heatmap
+
+## データの準備(Feature Engineering、前処理)
+
+### やることリスト
++ 外れ値の除去
++ 欠損値の補完または除去
++ 数値型特徴の対数化
++ 数値型特徴のカテゴリ化
++ 数値型特徴の正規化
++ カテゴリ型特徴のダミー変数化
++ カテゴリ型特徴の集約
++ カテゴリ型特徴の組み合わせ特徴生成
++ 多項式特徴量の作成
+
+### 便利ツール
++ sklearn.preprocessing
++ featuretools(特徴量を自動で生成してくれるツール)
++ automl系のライブラリ(前処理とモデリングを含めて最適化してくれるツール)
+    - auto-sklearn
+    - TPOT
+
+## モデリング
+特徴量の重要度を求めることで、重要となる特徴量や不要である特徴量が何であるかを考察することができる。この結果を受けて、特徴量の作成をし直したり、モデル解釈の補助をすることができる。
+###　やることリスト
++ 目的変数と説明変数間の相関係数
++ ラッソ回帰やリッジ回帰による抽出
++ 決定木ベースのモデルによる重要度抽出(Random Forest, XGBoost, LightGBM)
++ 学習モデル解釈の手法(LIME, SHAP)
++ 決定木の可視化(dtreeviz)
+
+### 便利ツール
++ sklearn.feature_selection.SelectKBest
++ sklearn.feature_selection.RFE
++ sklearn.feature_selection.SelectFromModel
++ mlflow(モデルの管理をしてくれるツール)
+
+## 参考
+https://qiita.com/masa26hiro/items/ce5f60e2950e072a0910
+
+
+# Player nodeが持つ属性
++ name(c, Players)
++ height(c, Players)
++ weight(c, Players)
++ collage(c, Players)
++ birth_city(c, Players)
++ birth_state(c, Players)
++ born(c, Players)
++ year(x, Seasons_Stats)
++ position(x, Seasons_Stats)
++ Tm(x, Seasons_Stats)
++ Age(= year-bornだけど, Seasons_Stats)
++ all_ohers_Stats(x, Seasons_Stats)
+
+# node.csv
+上記、カラムを有するcsvをname>yearでソート。
+0 Alex 1950 ・・・  
+0 Alex 1951 ・・・  
+0 Alex 1952 ・・・  
+1 Michel 1950 ・・・  
+1 Michel 1951 ・・・  
+1 Michel 1952 ・・・  
+
+# 放置
+下記、36歳以上切り捨てで一旦回避。欠損値全て切り捨てで一旦回避。
++ Players.csvの記入ミス(Harrison Barnes と Harry Barnes等)
++ Players.csvの同姓同名問題(player_data.csv参照で解決できそう)
++ 一つでもNaNを持つものをdrop
++ 同シーズン複数チームで出場している選手を排除。
+
+# time_series_graph.csv
+上記、カラム+リンクのエンコード情報(value, one-hot等)を有するcsvをyear>nameでソート。  
+1950 0 Alex ・・・ リンク情報  
+1950 1 Michel ・・・ リンク情報  
+1951 0 Alex ・・・ リンク情報  
+1951 1 Michel ・・・ リンク情報  
+1952 0 Alex ・・・ リンク情報  
+1952 1 Michel ・・・ リンク情報  
