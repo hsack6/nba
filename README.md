@@ -1,3 +1,25 @@
+# GCGNN
+GCGNNのアーキテクチャ詳細。
+
+## InputGraph
+GCGNNへの入力グラフを生成する。入力グラフは、過去Mステップで観測されたノード集合とリンク集合、将来Hステップで出現を予測されたノード集合とリンク集合を含む。
+
+### 欲しい機能
++ 未知ノード数と復帰ノード数の取得。
+    - PredictNodeNum関数の修正。
+        + modeをunknown, return, lostの3つにする。
+    - new_node()からGetNewNode()に名前変更。
+    - loss_node()からGetLostNode()に名前変更。
+    - 得られたnew_nodeをreturn_nodeとunknown_nodeに振り分ける。
+        + GetUnknownNode(new_node, GetObservedNodeSet(M))
+        + GetReturnNode(new_node, GetObservedNodeSet(M))
+    - GetObservedNodeSet(M) の作成。過去Mステップで観測されたノード集合を返す。
+
+
+
+
+
+
 # EDA と Feature Engineering
 
 NBAデータセットのEDAとFeature Engineeringに関するメモ。
